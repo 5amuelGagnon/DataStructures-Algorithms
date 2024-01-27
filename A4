@@ -1,0 +1,553 @@
+CCCS 315-784 Data Structures and Algorithms 
+Assignment 4 – Pseudo-code & Analysis 
+
+Part 1 
+Deciding the algorithms 
+While there are many sorting algorithms available, the most used ones today are generally those that are efficient, stable, and suitable for a variety of input sizes and data types. Here are some commonly used sorting algorithms: 
+Quick sort, Merge sort, Heap sort, Insertion sort, Selection sort, Bubble sort, Shell sort, Radix sort, Counting sort, Bucket sort, Comb sort, Cocktail sort, Gnome sort, Cycle sort, Stooge sort, Pigeonhole sort, Bitonic sort, Library sort, Smooth sort, Flash sort, Timsort, Introsort, QuickSelect 
+For a small input size such as 10, most sorting algorithms can sort the list quickly, and the performance differences between algorithms are generally not significant. However, some algorithms are still faster and more efficient than others. Here are five commonly used sorting algorithms that are suitable for sorting a 10 input size list of random integers: 
+-	Insertion sort: This is a simple and efficient algorithm that works well for small input sizes like 10. It has a time complexity of O(n^2) but can be faster than other O(n^2) algorithms like bubble sort and selection sort due to its adaptive nature. 
+-	Selection sort: Another simple and efficient algorithm that works well for small input sizes. It has a time complexity of O(n^2) but is generally faster than bubble sort due to its reduced number of swaps. 
+-	Bubble sort: This algorithm is straightforward and easy to implement, making it suitable for small input sizes. However, it has a time complexity of O(n^2) and is slower than insertion sort and selection sort in most cases. 
+-	Merge sort: This algorithm is efficient and has a time complexity of O(n log n), making it suitable for larger input sizes as well. While it may not be the fastest for small input sizes, it is still a good choice due to its stable and predictable performance. 
+-	Quick sort: This algorithm is widely used and has a time complexity of O(n log n) on average, making it efficient for most input sizes. However, its worst-case performance can be O(n^2), which makes it less suitable for some use cases. 
+ 
+ 
+ 
+For a list of 100 input size random integers, some of the algorithms that are suitable include: 
+-	Quicksort: This is a commonly used algorithm with an average time complexity of O(n log n). It is efficient for most input sizes and is often the go-to algorithm for many applications. 
+-	Merge sort: This is another efficient algorithm with a time complexity of O(n log n). It is stable and has good worst-case performance, making it suitable for many use cases. 
+-	Heap sort: This is an in-place sorting algorithm with a time complexity of O(n log n). It has good performance characteristics and is suitable for many input sizes, including 100. 
+-	Radix sort: This is a linear time sorting algorithm that is suitable for integers of limited range, making it a good choice for sorting random integers. Its time complexity is O(kn), where k is the number of digits in the largest number. For a list of 100 random integers, radix sort can be very efficient. 
+-	Shell sort: This is an efficient and simple sorting algorithm that can be effective for small to medium input sizes like 100. Its time complexity is O(n log n) in the best case and O(n^2) in the worst case. 
+ 
+For a list of 1000 input size random integers, some of the algorithms that are suitable include: 
+-	Quicksort: This is a commonly used algorithm with an average time complexity of O(n log n). It is efficient for most input sizes and is often the go-to algorithm for many applications. 
+-	Merge sort: This is another efficient algorithm with a time complexity of O(n log n). It is stable and has good worst-case performance, making it suitable for many use cases. 
+-	Heap sort: This is an in-place sorting algorithm with a time complexity of O(n log n). It has good performance characteristics and is suitable for many input sizes, including 1000. 
+-	Radix sort: This is a linear time sorting algorithm that is suitable for integers of limited range, making it a good choice for sorting random integers. Its time complexity is O(kn), where k is the number of digits in the largest number. For a list of 1000 random integers, radix sort can be very efficient. 
+-	Quickselect: This is an algorithm that is used to find the k-th smallest element in a list, but it can also be used as a sorting algorithm. Its average time complexity is O(n), making it very efficient for small to medium input sizes like 1000. 
+ 
+ 
+ 
+Pseudocodes 
+A) MergeSort 
+public void mergeSort(int[] arr, int left, int right) { 
+    if (left < right) {         int mid = (left + right) / 2; 
+        mergeSort(arr, left, mid); // Sort left subarray         mergeSort(arr, mid + 1, right); // Sort right subarray 
+        merge(arr, left, mid, right); // Merge the two sorted subarrays 
+    } 
+} 
+public void merge(int[] arr, int left, int mid, int right) { 
+    int[] tempArr = new int[arr.length]; // Create a temporary array for merging     int i = left; // Index of the left subarray     int j = mid + 1; // Index of the right subarray 
+    int k = left; // Index of the merged subarray 
+ 
+    while (i <= mid && j <= right) {         if (arr[i] <= arr[j]) { 
+            tempArr[k] = arr[i];             i++;         } else {             tempArr[k] = arr[j];             j++; 
+        }         k++; 
+    } 
+    while (i <= mid) { // Copy remaining elements from the left subarray         tempArr[k] = arr[i];         i++; 
+        k++; 
+    } 
+    while (j <= right) { // Copy remaining elements from the right subarray         tempArr[k] = arr[j];         j++; 
+        k++; 
+    } 
+    for (k = left; k <= right; k++) { // Copy merged elements back to the original array         arr[k] = tempArr[k]; 
+    }  
+} 
+B) RadixSort 
+ 
+public void radixSort(int[] arr) { 
+    int maxNum = arr[0]; // Find the maximum number in the array 
+    for (int i = 1; i < arr.length; i++) {         if (arr[i] > maxNum) {             maxNum = arr[i]; 
+        } 
+    } 
+ 
+    int exp = 1; // Initialize the exponent to 1 
+    int[] tempArr = new int[arr.length]; // Create a temporary array for sorting 
+ 
+    while (maxNum / exp > 0) { // Repeat for each digit in the maximum number         int[] countArr = new int[10]; // Initialize count array for each digit 
+ 
+        for (int i = 0; i < arr.length; i++) { 
+            int digit = (arr[i] / exp) % 10; // Extract the digit from the number             countArr[digit]++; // Increment the count for that digit 
+        } 
+ 
+        for (int i = 1; i < countArr.length; i++) { 
+            countArr[i] += countArr[i - 1]; // Compute the prefix sums of the count array 
+        } 
+ 
+        for (int i = arr.length - 1; i >= 0; i--) { 
+            int digit = (arr[i] / exp) % 10; // Extract the digit from the number 
+            tempArr[countArr[digit] - 1] = arr[i]; // Place the number in the correct position in the temporary array 
+            countArr[digit]--; // Decrement the count for that digit 
+        } 
+ 
+        for (int i = 0; i < arr.length; i++) { 
+            arr[i] = tempArr[i]; // Copy the sorted numbers back to the original array 
+        } 
+ 
+        exp *= 10; // Multiply the exponent by 10 to move to the next digit 
+    } 
+} 
+ 
+C) QuickSelect 
+public int quickSelect(int[] arr, int left, int right, int k) {     if (left == right) { 
+        return arr[left]; // Base case: array has only one element 
+    } 
+ 
+    int pivotIndex = partition(arr, left, right); // Choose a pivot and partition the array 
+ 
+    if (k == pivotIndex) { 
+        return arr[k]; // The k-th smallest element is the pivot 
+    } else if (k < pivotIndex) { 
+        return quickSelect(arr, left, pivotIndex - 1, k); // Recursively search the left subarray 
+    } else { 
+        return quickSelect(arr, pivotIndex + 1, right, k); // Recursively search the right subarray 
+    } 
+} 
+ 
+public int partition(int[] arr, int left, int right) { 
+    int pivot = arr[right]; // Choose the last element as the pivot     int i = left - 1; // Index of the last element in the smaller subarray 
+ 
+    for (int j = left; j < right; j++) {         if (arr[j] < pivot) { 
+            i++; // Increment the index of the last element in the smaller subarray 
+            swap(arr, i, j); // Swap the current element with the last element in the smaller subarray 
+        } 
+    } 
+ 
+    swap(arr, i + 1, right); // Swap the pivot with the first element in the larger subarray     return i + 1; // Return the index of the pivot 
+} 
+ 
+public void swap(int[] arr, int i, int j) {     int temp = arr[i];     arr[i] = arr[j]; 
+    arr[j] = temp; 
+} 
+ 
+Time complexity and Big-O analysis 
+
+A) MergeSort 
+The time complexity of merge sort can be analyzed using the Master Theorem, which gives a time complexity for the worst-case and average-case scenarios. 
+Here is the breakdown of each operation:  
+-	Divide: In each recursive call, the input array is divided into two subarrays of size n/2. 
+-	Conquer: Each subarray is sorted recursively using merge sort, which takes T(n/2) time. 
+-	Combine: The two sorted subarrays are merged together into a single sorted array, which takes O(n) time. 
+The total time complexity of merge sort can be expressed as: T(n) = 2T(n/2) + O(n) 
+The Big-O of merge sort as a function of f(n) is O(n log n) for the worst-case and average-case scenarios, where n is the size of the input array. 
+ 
+B) RadixSort 
+Here is the breakdown of each operation:  
+-	Initialize count array: This step takes O(k) time, where k is the number of digits in the largest number. 
+-	Count occurrences: This step involves iterating through the input array and counting the number of occurrences of each digit. Since we have to do this for each digit, the time complexity of this step is O(dn), where d is the number of digits and n is the size of the input array. 
+-	Compute prefix sums: This step involves computing the prefix sums of the count array. Since we have to do this for each digit, the time complexity of this step is also O(dn). 
+-	Rearrange elements: This step involves rearranging the input array based on the counts and prefix sums computed in the previous steps. This step takes O(dn) time. 
+The time complexity of radix sort can be expressed as: T(n) = O(k) + 3O(dn) 
+The Big-O of radix sort as a function of f(n) is O(n) for the worst-case and average-case scenarios, where n is the size of the input array. 
+ 
+C) QuickSelect 
+The time complexity of QuickSelect can be analyzed using the same logic as quicksort, which uses a partitioning process to recursively sort the array. The partitioning process divides the array into two subarrays, one with elements less than the pivot and one with elements greater than or equal to the pivot. The pivot is placed in its final sorted position and the process is applied recursively to the two subarrays.  
+Here is the breakdown of each operation:  
+-	Partition: This step involves selecting a pivot and partitioning the array into two subarrays. This step takes O(n) time in the worst case if the pivot is repeatedly chosen as the largest or smallest element in the array. 
+-	Recursion: QuickSelect is called recursively on one of the two subarrays. In the worst case, the subarray is of size n-1, so the recursion depth is n-1. Therefore, the total time complexity of the recursive step is O(n^2). 
+-	Selection: Once the recursion reaches a subarray of size 1, the algorithm has found the kth smallest element. This step takes O(1) time. 
+The average time complexity can be expressed as: T(n) = O(n) + T(n/2) 
+By applying the Master Theorem, the Big-O of QuickSelect sort as a function of f(n) is O(n) for the average-case scenarios and O(n^2) for the worst-case scenarios, where n is the size of the input array. Since we are using a randomized selection, the worst-case scenario is unlikely. 
+ 
+Comparison for different input size (100 vs 10 vs 1000) 
+Input size 10  
+It's difficult to say which one is faster for a specific input size of 10, as the runtime of the algorithms depends on a number of factors, such as the implementation details, the specific input values, and the hardware on which the code is executed. 
+However, in general, for small input sizes like 10, the difference in performance between the three algorithms is likely to be small. MergeSort and RadixSort have a worst-case time complexity of O(n log n) and O(n) respectively, where n is the size of the input and d is the number of digits in the largest number. QuickSelect has a worst-case time complexity of O(n^2), but it has an average-case time complexity of O(n). 
+So if we assume that the input values are uniformly distributed and there are no duplicates, RadixSort may be slightly faster than MergeSort and QuickSelect for an input size of 10. However, if the input contains duplicates or is not uniformly distributed, the relative performance of the algorithms may be different. Ultimately, the best way to determine which algorithm is faster for a specific input is to implement and benchmark each algorithm on that input. 
+Input size 100  
+It is difficult to say which sorting algorithm is faster for a randomised input size of 100 without benchmarking each algorithm. However, we can generally compare their time complexities. 
+MergeSort has a time complexity of O(n log n) in the worst-case scenario. 
+RadixSort has a time complexity of O(n) in the worst-case scenario, where d is the number of digits and n is the size of the input array. In this case, since we are dealing with random integers between 5 and 1000, we can assume that d is relatively small. 
+QuickSelect has a time complexity of O(n) in the worst-case scenario, but its performance is highly dependent on the choice of the pivot element. 
+Based on their time complexities, we can expect RadixSort to be faster than MergeSort for a randomised input size of 100, but QuickSelect could potentially be faster than both if the pivot element is chosen optimally. However, as previously mentioned, it is difficult to determine which algorithm is faster without benchmarking. 
+ 
+Input size 1000 
+It depends on the specific input values, but generally speaking, MergeSort and RadixSort are expected to have a time complexity of O(nlogn) and O(dn), respectively, where n is the size of the input array and d is the number of digits in the largest number. QuickSelect has an expected time complexity of O(n), but it depends on the position of the desired element in the sorted array. 
+For a random input size of 1000, all three sorting algorithms are likely to have similar running times, with MergeSort and RadixSort expected to perform better than QuickSelect in most cases. However, the actual running time will depend on the specific distribution of the input values. 
+ 
+Conclusion 
+The performance of MergeSort, RadixSort, and QuickSelect on a randomized list of integers can depend on the specific properties of the data, such as the range of the values, the distribution of the values, and the presence of duplicate elements. 
+In general, for a randomized list of integers, MergeSort and RadixSort are likely to be faster than QuickSelect for larger input sizes (100-1000), as they have a time complexity of O(nlogn) and O(dn) respectivily, which is faster than QuickSelect's expected time complexity of O(n). However, for very small input sizes (10), QuickSelect might be faster due to its lower overhead and fewer recursive calls. 
+ 
+ 
+ 
+ 
+ 
+Part 2 
+ 
+Behavior test and average time of each sorting algorithms 
+Tests for input size 10 (5x) 
+MergeSort times: 1136900+1328400+1937800+1266300+1166000 nanoseconds 
+Average time: 6 835 400/5 = 1 367 080 nanoseconds 
+RadixSort times: 1042400+1318000+1731700+2299000+1970000 nanoseconds 
+Average time: 8 361 100/5 = 1 672 220 nanoseconds 
+QuickSelect times: 1787700+1136700+1275200+2347600+1970700 nanoseconds 
+Average time: 8 517 900/5 = 1 703 580 nanoseconds 
+MergeSort was the fastest algorithm for an input size of 10 
+ 
+Tests for input size 100 (5x) 
+MergeSort times: 1180600+2047400+2020100+1359300+1434000 nanoseconds 
+Average time: 8 041 400/5 = 1 608 280 nanoseconds 
+RadixSort times: 1573500+1746800+2009200+1554700+1389500 nanoseconds 
+Average time: 8 273 700/5 = 1 654 740 nanoseconds 
+QuickSelect times: 1277500+1796800+1651000+1378800+1423500 nanoseconds 
+Average time: 7 527 600/5 = 1 505 520 nanoseconds 
+QuickSelect was the fastest algorithm for an input size of 100 
+ 
+Test for input size 1000 (5x) 
+MergeSort times: 2716700+ 1606100+2456400+2460500+3400600 nanoseconds 
+Average time: 12 640 300/5 = 2 528 060 nanoseconds 
+RadixSort times: 1826300+1658600+2134800+3022800+2024100 nanoseconds 
+Average time: 10 666 600/5 = 2 133 320 nanoseconds 
+QuickSelect times: 1506300+1321600+1778900+2147800+1696500 nanoseconds 
+Average time: 8 451 100/5 = 1 690 220 nanoseconds 
+QuickSelect was the fastest algorithm for an input size of 1000  
+ 
+Why did you choose them? 
+ 
+There are many sorting algorithms available, each with its strengths and weaknesses. I chose MergeSort, RadixSort, and QuickSelect because they are efficient and versatile algorithms that can handle a wide range of input sizes and data types. 
+ 
+MergeSort has a worst-case time complexity of O(n log n) and is stable, meaning it preserves the order of equal elements.  
+ 
+RadixSort has a worst-case time complexity of O(nk), where k is the number of digits in the largest number, and is particularly useful for sorting large integers.  
+ 
+QuickSelect has a worst-case time complexity of O(n^2), but on average performs well with a time complexity of O(n), making it a good choice for finding the kth smallest element in an unsorted array.  
+ 
+Overall, these three algorithms provide a good balance of performance and flexibility for sorting and searching data in various applications. 
+ 
+What was the big-O of them? 
+ 
+The Big O of MergeSort is O(n log n).  
+ 
+The Big O of RadixSort is O(dn), where d is the number of digits and n is the size of the input array. In practical terms, this is usually considered to be O(n).  
+ 
+The Big O of QuickSelect is O(n^2) in the worst-case scenario, but O(n) on average. 
+ 
+Did they perform the way you expected? 
+ 
+I was expecting the RadixSort algorithm to be the fastest one for an input size of 10 and 100, but MergeSort performed better for the 10 input size and QuickSelect for the 100 input size. For the 1000 input size, QuickSelect performed as expected, meaning it was the fastest algorithm as predicted. 
+ 
+Can you re-do it in such a way that your array (your random array, if not random) is worst-case scenario? 
+ 
+MergeSort: the worst-case scenario for the MergeSort algorithm is when the input array is in reverse order, or when all the elements are the same. In this case, each merge operation would require traversing the entire subarray, resulting in O(nlogn) time complexity for the entire algorithm.   
+ 
+RadixSort: the worst-case scenario for RadixSort occurs when all the numbers have the same number of digits and each digit is distinct. In this case, the algorithm must perform d passes (where d is the number of digits) and on each pass, all n elements must be compared, resulting in a time complexity of O(dn). Therefore, the worst-case time complexity of RadixSort is O(dn), where d is the number of digits and n is the size of the input array. However, this worst-case scenario is relatively rare in practice, and in most cases, RadixSort runs much faster than comparison-based sorting algorithms.  
+ 
+QuickSelect: the worst-case scenario for the QuickSelect algorithm occurs when the partitioning method consistently selects a bad pivot element, resulting in unbalanced partitions. In this case, the algorithm can degenerate into O(n^2) time complexity, which happens when the input array is already sorted or when all elements have the same value. However, the probability of this worst-case scenario occurring can be reduced by using a randomized selection of the pivot element, as is typically done in the QuickSelect algorithm. 
+
+--------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------
+
+// Part 2 - Sorting
+
+import java.util.Arrays;
+import java.util.Random;
+
+/**
+ * A simple program to compare the performance of MergeSort, RadixSort, and QuickSelect
+ * on an array of random integers
+ */
+
+public class App {
+
+    /**
+     * Main method that generates an array of random integers and measures the time
+     * taken by each sorting algorithm to sort the array.
+     * @param args Command-line arguments (unused)
+     */
+    public static void main(String[] args) {
+
+        // Define the number of items to sort
+        int numItems = 1000;
+
+        // Create an array of random integers
+        int[] myArr = new int[numItems];
+        Random myRand = new Random();
+        int min = 5;
+        int max = 1000;
+        for (int i = 0; i < myArr.length; i++) {
+            myArr[i] = myRand.nextInt(max - min + 1) + min;
+        }
+
+        // MergeSort
+        // Create a copy of the array for MergeSort
+        int[] mergeSortArr = Arrays.copyOf(myArr, myArr.length);
+        // Measure the start time of MergeSort
+        long mergeSortStartTime = System.nanoTime();
+        // Sort the array using MergeSort
+        MergeSort.sort(mergeSortArr);
+        // Measure the end time of MergeSort
+        long mergeSortEndTime = System.nanoTime();
+        // Calculate the duration of MergeSort
+        long mergeSortDuration = mergeSortEndTime - mergeSortStartTime;
+        // Print the duration of MergeSort
+        System.out.println("MergeSort time: " + mergeSortDuration + " nanoseconds");
+
+        // RadixSort
+        // Create a copy of the array for RadixSort
+        int[] radixSortArr = Arrays.copyOf(myArr, myArr.length);
+        // Measure the start time of RadixSort
+        long radixSortStartTime = System.nanoTime();
+        // Sort the array using RadixSort
+        RadixSort.sort(radixSortArr);
+        // Measure the end time of RadixSort
+        long radixSortEndTime = System.nanoTime();
+        // Calculate the duration of RadixSort
+        long radixSortDuration = radixSortEndTime - radixSortStartTime;
+        // Print the duration of RadixSort
+        System.out.println("RadixSort time: " + radixSortDuration + " nanoseconds");
+
+        // QuickSelect
+        // Create a copy of the array for QuickSelect
+        int[] quickSelectArr = Arrays.copyOf(myArr, myArr.length);
+        // Choose the value of k for QuickSelect
+        int k = myArr.length / 2;
+        // Measure the start time of QuickSelect
+        long quickSelectStartTime = System.nanoTime();
+        // Find the k-th the smallest element in the array using QuickSelect
+        int quickSelectResult = QuickSelect.select(quickSelectArr, k);
+        // Measure the end time of QuickSelect
+        long quickSelectEndTime = System.nanoTime();
+        // Calculate the duration of QuickSelect
+        long quickSelectDuration = quickSelectEndTime - quickSelectStartTime;
+        // Print the duration of QuickSelect
+        System.out.println("QuickSelect time: " + quickSelectDuration + " nanoseconds");
+    }
+}
+
+
+--------------------------------------------------------------------------------------------
+
+/**
+ * A class that implements the MergeSort algorithm for sorting an array of integers.
+ */
+
+public class MergeSort {
+
+    /**
+     * Sorts the input array using the MergeSort algorithm.
+     *
+     * @param arr the array to be sorted
+     */
+    public static void sort(int[] arr) {
+        // Check if the array is null or has length less than 2
+        if (arr == null || arr.length <= 1) {
+            return;
+        }
+        // Create a temporary array to hold the sorted elements
+        int[] temp = new int[arr.length];
+        // Call the recursive sort method
+        sort(arr, 0, arr.length - 1, temp);
+    }
+
+    /**
+     * Recursive method to sort a range of the input array using the MergeSort algorithm.
+     *
+     * @param arr   the array to be sorted
+     * @param left  the left index of the range to be sorted
+     * @param right the right index of the range to be sorted
+     * @param temp  the temporary array to hold the sorted elements
+     */
+    private static void sort(int[] arr, int left, int right, int[] temp) {
+        // Check if the range has at least 2 elements
+        if (left < right) {
+            // Calculate the middle index of the range
+            int mid = (left + right) / 2;
+            // Recursively sort the left half of the range
+            sort(arr, left, mid, temp);
+            // Recursively sort the right half of the range
+            sort(arr, mid + 1, right, temp);
+            // Merge the sorted left and right halves
+            merge(arr, left, mid, right, temp);
+        }
+    }
+
+    /**
+     * Merges two sorted halves of the input array into a single sorted range.
+     *
+     * @param arr   the array containing the two sorted halves
+     * @param left  the left index of the left half
+     * @param mid   the right index of the left half and the left index of the right half
+     * @param right the right index of the right half
+     * @param temp  the temporary array to hold the merged elements
+     */
+    private static void merge(int[] arr, int left, int mid, int right, int[] temp) {
+        // Initialize pointers to the left and right halves
+        int i = left;
+        int j = mid + 1;
+        // Initialize pointer to the temporary array
+        int k = left;
+        // Merge the two halves by comparing the elements
+        while (i <= mid && j <= right) {
+            if (arr[i] < arr[j]) {
+                temp[k++] = arr[i++];
+            } else {
+                temp[k++] = arr[j++];
+            }
+        }
+        // Copy the remaining elements of the left half to the temporary array
+        while (i <= mid) {
+            temp[k++] = arr[i++];
+        }
+        // Copy the remaining elements of the right half to the temporary array
+        while (j <= right) {
+            temp[k++] = arr[j++];
+        }
+        // Copy the merged elements from the temporary array back to the original array
+        for (i = left; i <= right; i++) {
+            arr[i] = temp[i];
+        }
+    }
+}
+
+--------------------------------------------------------------------------------------------
+
+/**
+ * A class that implements the QuickSelect algorithm to find the kth the smallest element in an array.
+ */
+
+public class QuickSelect {
+
+    /**
+     * Finds the kth the smallest element in an array.
+     *
+     * @param arr the array to search
+     * @param k   the rank of the desired element
+     * @return the kth the smallest element
+     * @throws IllegalArgumentException if the input array is null or the rank is invalid
+     */
+    public static int select(int[] arr, int k) {
+        if (arr == null || arr.length < k) { // check if input array is null or rank is invalid
+            throw new IllegalArgumentException("Invalid input");
+        }
+        int left = 0;
+        int right = arr.length - 1;
+        while (left <= right) {
+            int pivotIndex = partition(arr, left, right); // partition the array around a pivot element
+            if (pivotIndex == k - 1) { // if pivot index is the kth the smallest element
+                return arr[pivotIndex];
+            } else if (pivotIndex > k - 1) { // if pivot index is greater than kth the smallest element
+                right = pivotIndex - 1; // search the left partition
+            } else {
+                left = pivotIndex + 1; // search the right partition
+            }
+        }
+        throw new IllegalArgumentException("Invalid input"); // throw exception if no kth the  smallest element found
+    }
+
+    /**
+     * Partitions the array around a pivot element and returns the index of the pivot element.
+     *
+     * @param arr   the array to partition
+     * @param left  the left index of the partition
+     * @param right the right index of the partition
+     * @return the index of the pivot element
+     */
+    private static int partition(int[] arr, int left, int right) {
+        int pivotIndex = (left + right) / 2; // choose the middle element as pivot
+        int pivotValue = arr[pivotIndex];
+        swap(arr, pivotIndex, right); // move pivot element to the right end
+        int storeIndex = left;
+        for (int i = left; i < right; i++) {
+            if (arr[i] < pivotValue) {
+                swap(arr, i, storeIndex);
+                storeIndex++;
+            }
+        }
+        swap(arr, storeIndex, right); // move pivot element to its final position
+        return storeIndex;
+    }
+
+    /**
+     * Swaps two elements in an array.
+     *
+     * @param arr the array to modify
+     * @param i   the index of the first element to swap
+     * @param j   the index of the second element to swap
+     */
+    private static void swap(int[] arr, int i, int j) {
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+}
+
+--------------------------------------------------------------------------------------------
+
+/**
+ * A class that implements the RadixSort algorithm for sorting an array of integers.
+ */
+
+public class RadixSort {
+
+    /**
+     * Sorts the input array using the RadixSort algorithm.
+     *
+     * @param arr the array to be sorted
+     */
+    public static void sort(int[] arr) {
+        // Check if the array is null or has length less than 2
+        if (arr == null || arr.length <= 1) {
+            return;
+        }
+        // Get the maximum element in the array
+        int max = getMax(arr);
+        // Iterate through the digits from least significant to most significant
+        for (int exp = 1; max / exp > 0; exp *= 10) {
+            // Sort the array using the current digit
+            countSort(arr, exp);
+        }
+    }
+
+    /**
+     * Returns the maximum element in the input array.
+     *
+     * @param arr the array to be searched
+     * @return the maximum element in the array
+     */
+    private static int getMax(int[] arr) {
+        int max = arr[0];
+        for (int i = 1; i < arr.length; i++) {
+            if (arr[i] > max) {
+                max = arr[i];
+            }
+        }
+        return max;
+    }
+
+    /**
+     * Sorts the input array using the counting sort algorithm based on the specified digit.
+     *
+     * @param arr the array to be sorted
+     * @param exp the digit position to sort on (1, 10, 100, etc.)
+     */
+    private static void countSort(int[] arr, int exp) {
+        // Create arrays to hold the sorted elements and the digit counts
+        int[] output = new int[arr.length];
+        int[] count = new int[10];
+
+        // Count the occurrences of each digit in the array
+        for (int j : arr) {
+            int digit = (j / exp) % 10;
+            count[digit]++;
+        }
+
+        // Compute the prefix sums of the digit counts
+        for (int i = 1; i < 10; i++) {
+            count[i] += count[i - 1];
+        }
+
+        // Rearrange the elements in the output array based on the digit counts
+        for (int i = arr.length - 1; i >= 0; i--) {
+            int digit = (arr[i] / exp) % 10;
+            output[count[digit] - 1] = arr[i];
+            count[digit]--;
+        }
+
+        // Copy the sorted elements from the output array back to the input array
+        System.arraycopy(output, 0, arr, 0, arr.length);
+    }
+}
+
