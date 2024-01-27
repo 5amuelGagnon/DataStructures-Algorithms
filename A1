@@ -1,0 +1,449 @@
+// Part 1 - MyLinkedList
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        // Create a new instance of the data structure class called myLinkedList
+        MyLinkedList myLinkedList = new MyLinkedList();
+        myLinkedList.add(5);
+        myLinkedList.add(4);
+        myLinkedList.add(3);
+
+
+        // Create a new instance of the data structure class called otherList
+        MyLinkedList otherList = new MyLinkedList();
+        otherList.add(5);
+        otherList.add(4);
+        otherList.add(3);
+        otherList.add(2);
+        otherList.add(1);
+
+        // Test the toString method
+        System.out.println("MyLinkedList: " + myLinkedList);
+        System.out.println("otherList: " + otherList);
+
+        // Test the add method
+        System.out.println("Before adding elements, the MyLinkedList is: " + myLinkedList);
+        myLinkedList.add(2);
+        myLinkedList.add(1);
+        System.out.println("After adding elements, the MyLinkedList is: " + myLinkedList);
+
+        // Test the addAfter method
+        System.out.println("Before adding an element after another element, the data structure is: " + myLinkedList);
+        myLinkedList.addAfter(10, 5);
+        System.out.println("After adding an element after another element, the data structure is: " + myLinkedList);
+
+        // Test the remove method
+        System.out.println("Before removing an element, the MyLinkedList is: " + myLinkedList);
+        myLinkedList.remove(10);
+        System.out.println("After removing an element, the MyLinkedList is: " + myLinkedList);
+
+        // Test the size method
+        System.out.println("Size of MyLinkedList before adding: " + myLinkedList.size());
+        myLinkedList.add(4);
+        myLinkedList.add(5);
+        myLinkedList.add(6);
+        System.out.println("Size of MyLinkedList after adding: " + myLinkedList.size());
+
+        // Test the contains method
+        System.out.println("Is 2 in the data structure? " + myLinkedList.contains(2));
+        System.out.println("Is 8 in the data structure? " + myLinkedList.contains(8));
+
+        // Test the compare method
+        System.out.println("MyLinkedList: " + myLinkedList);
+        System.out.println("otherList: " + otherList);
+        System.out.println("Are the two data structures equal? " + myLinkedList.compare(otherList));
+
+        // Test the addInOrder method
+        System.out.println("Before adding an element in order, the data structure is: " + myLinkedList);
+        myLinkedList.addInOrder(4);
+        System.out.println("After adding an element in order, the data structure is: " + myLinkedList);
+    }
+}
+
+-----------------------------------------------------------------------------------------------------------
+
+/**
+ * MyLinkedList is a custom implementation of a linked list data structure.
+ * The class contains a head node, an integer size which represents the number of elements in the list,
+ * an integer data field, and a Node next field.
+ * The class provides several methods for adding elements to the list, removing elements,
+ * determining the size of the list, checking if the list contains a specific element,
+ * converting the list to a string representation, comparing two linked lists, and adding elements in sorted order.
+ */
+
+public class MyLinkedList {
+
+    Node head;
+    int size = 0;
+
+    /**
+     * Adds an element to the linked list as the head node.
+     *
+     * @param element The int element to be added as the head node of the linked list.
+     */
+    public void add(int element) {
+
+        Node n = new Node(element); // creates a new Node object and initializes it with the element passed to the add method.
+        n.next = head; // sets the next reference of the newly created Node object to point to the current head of the linked list.
+        head = n; // sets the head reference to point to the newly created Node object. This makes the newly created Node object the new head of the linked list.
+        size++; // increments the size of the linked list by 1 to reflect the addition of a new node to the linked list.
+    }
+
+    /**
+     * Adds a new node with the specified `element` after the node with the value `afterInt` in the linked list.
+     *
+     * @param element  the element to be added to the linked list
+     * @param afterInt the int value of the node after which the new node will be inserted
+     */
+    public void addAfter(int element, int afterInt) {
+        // Start from the head node
+        Node current = head;
+        // Loop through the linked list until we find the node with the specified int value
+        while (current != null && current.data != afterInt) {
+            current = current.next;
+        }
+        // If we didn't find the node with the specified int value, return
+        if (current == null) {
+            return;
+        }
+        // Create a new node with the specified element
+        Node newNode = new Node(element);
+        // Set the next node of the new node to be the next node of the current node
+        newNode.next = current.next;
+        // Set the next node of the current node to be the new node
+        current.next = newNode;
+        // Increment the size of the linked list
+        size++;
+    }
+
+    /**
+     * This method removes the first occurrence of a node with the specified value in the linked list.
+     *
+     * @param value The value of the node to be removed.
+     */
+    public void remove(int value) {
+        // Check if the linked list is empty
+        if (head == null) {
+            return;
+        }
+        // Check if the head node has the value to be removed
+        if (head.data == value) {
+            head = head.next; // Update the head to the next node in the list
+            size--; // Decrement the size of the linked list
+            return;
+        }
+        Node current = head; // Initialize the current node to the head of the linked list
+
+        // Iterate through the linked list until the value is found or end of the list is reached
+        while (current.next != null && current.next.data != value) {
+            current = current.next; // Update the current node to the next node in the list
+        }
+        // Check if the end of the list has been reached
+        if (current.next == null) {
+            return;
+        }
+        // Remove the node with the specified value by updating its next reference
+        current.next = current.next.next;
+        size--; // Decrement the size of the linked list
+    }
+
+    /**
+     * Returns the number of elements in the linked list.
+     *
+     * @return The number of elements in the linked list.
+     */
+    public int size() {
+
+        return size;
+    }
+
+    /**
+     * The method checks if the linked list contains a node with the specified value.
+     *
+     * @param value the value to be searched for in the linked list
+     * @return a boolean indicating whether the value was found in the linked list (true) or not (false)
+     */
+    public boolean contains(int value) {
+        // Start from the head of the linked list.
+        Node current = head;
+        // Iterate through the linked list until the end.
+        while (current != null) {
+            // Check if the current node contains the value.
+            if (current.data == value) {
+                // Return True if the value is found.
+                return true;
+            }
+            // Move to the next node in the linked list.
+            current = current.next;
+        }
+        // Return False if the value is not found in the linked list.
+        return false;
+    }
+
+    /**
+     * Returns a string representation of the linked list.
+     * The string representation is created by iterating through the linked list,
+     * appending the data of each node to a StringBuilder object, and returning the result as a string.
+     *
+     * @return a string representation of the linked list, with the elements separated by a single space
+     */
+
+    public String toString() {
+        // Initialize a StringBuilder object to store the string representation of the linked list
+        StringBuilder sb = new StringBuilder();
+
+        // Start at the head of the linked list
+        Node current = head;
+
+        // Iterate through the linked list
+        while (current != null) {
+            // Append the data of each node to the string builder
+            sb.append(current.data).append(" ");
+
+            // Move to the next node
+            current = current.next;
+        }
+
+        // Return the string representation of the linked list
+        return sb.toString().trim();
+    }
+
+    /**
+     * Compares the elements of this linked list with the elements of another linked list.
+     *
+     * @param otherList the linked list to compare this linked list with
+     * @return true if both linked lists have the same elements in the same order, false otherwise
+     */
+    public boolean compare(MyLinkedList otherList) {
+        // Get reference to the first node in both linked lists
+        Node current1 = head;
+        Node current2 = otherList.head;
+
+        // Traverse both linked lists simultaneously
+        while (current1 != null && current2 != null) {
+            // If the data of any of the nodes does not match, return false
+            if (current1.data != current2.data) {
+                return false;
+            }
+
+            // Move to the next node in both linked lists
+            current1 = current1.next;
+            current2 = current2.next;
+        }
+
+        // If both linked lists have been traversed and every node's data matches, return true
+        return current1 == null && current2 == null;
+    }
+
+    /**
+     * Adds a new node with the specified element in a sorted manner to the linked list.
+     * The new node will be added in such a way that the linked list remains sorted in ascending order.
+     *
+     * @param element the element to be added to the linked list
+     */
+    public void addInOrder(int element) {
+        // Create a new node with the given element.
+        Node newNode = new Node(element);
+        // Check if the linked list is empty or if the head node has a value greater than or equal to the given element.
+        if (head == null || head.data >= element) {
+            // In this case, set the new node as the head node.
+            newNode.next = head;
+            head = newNode;
+            size++;
+            return;
+        }
+        // Otherwise, traverse the linked list to find the correct position for the new node.
+        Node current = head;
+        while (current.next != null && current.next.data < element) {
+            current = current.next;
+        }
+        // Insert the new node into the linked list.
+        newNode.next = current.next;
+        current.next = newNode;
+        size++;
+    }
+
+}
+
+-----------------------------------------------------------------------------------------------------------
+
+public class Node {
+    /**
+     * The data stored in the node.
+     */
+    int data;
+
+    /**
+     * The next node in the linked list.
+     */
+    Node next;
+
+    /**
+     * Constructs a Node object with a given data value.
+     *
+     * @param data the data value for the node.
+     */
+    Node(int data) {
+        this.data = data;
+        this.next = null;
+    }
+}
+
+-----------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------
+
+// Part 2 - Array
+
+import java.util.Random; // this creates random for our program
+public class App {
+
+    // you have to do two ways, once with loops, once with Recursive (For recursive you need more functions or methods,
+    // so create them)
+
+    /**
+     * Finds the index of the minimum element in a given integer array using a loop.
+     *
+     * @param arr the integer array to search
+     * @return the index of the minimum element in the given array
+     */
+    public static int minFinder(int[] arr) {
+        // Initialize the index of the minimum element to 0
+        int index = 0;
+        // Initialize the minimum value to the first element in the array
+        int min = arr[0];
+        // Loop through the rest of the elements in the array
+        for (int i = 1; i < arr.length; i++) {
+            // If the current element is less than the minimum value, update the minimum value and index
+            if (arr[i] < min) {
+                min = arr[i];
+                index = i;
+            }
+        }
+        // Return the index of the minimum element
+        return index;
+    }
+
+    /**
+     * Finds the index of the minimum element in a given integer array using a recursive approach.
+     *
+     * @param arr the integer array to search
+     * @param start the starting index of the search range
+     * @param end the ending index of the search range
+     * @return the index of the minimum element in the given array
+     */
+    public static int minFinder_recursive(int[] arr, int start, int end) {
+        // If the start and end indices are the same, return the start index
+        if (start == end) {
+            return start;
+        }
+        // Calculate the midpoint of the search range
+        int mid = (start + end) / 2;
+        // Recursively search the left half of the array
+        int leftIndex = minFinder_recursive(arr, start, mid);
+        // Recursively search the right half of the array
+        int rightIndex = minFinder_recursive(arr, mid + 1, end);
+        // Compare the results of the two recursive calls to determine the minimum index
+        if (arr[leftIndex] < arr[rightIndex]) {
+            return leftIndex;
+        } else {
+            return rightIndex;
+        }
+    }
+
+    /**
+     * Finds the index of the minimum element in a given integer array using a recursive approach.
+     *
+     * @param arr the integer array to search
+     * @return the index of the minimum element in the given array
+     */
+    public static int minFinder_recursive(int[] arr) {
+        // Call the recursive method with the full range of the array
+        return minFinder_recursive(arr, 0, arr.length - 1);
+    }
+
+    /**
+     * Main method for testing the minFinder and minFinder_recursive methods.
+     * Generates an array of 100 random integers, finds the minimum value and its index, and outputs the results.
+     *
+     * @param args command line arguments
+     * @throws Exception if an error occurs while generating or finding the minimum value
+     */
+
+    public static void main(String[] args) throws Exception {
+        int[] myArr = new int[100];
+        Random myRand = new Random(); // creating Random object
+        // Range for random to select from
+        int min = 5;
+        int max = 1000;
+
+        int indexMin=0;
+
+        for (int i = 0; i < myArr.length; i++) {
+            myArr[i] = myRand.nextInt(max-min+1) + min; // storing random integers in an array
+        }
+        // here we check the last item of array to see if it is full:
+        System.out.println(myArr[ myArr.length-1]); // printing last element, not the biggest or smallest but just the last one
+        //now we find the minimum calling the function you wrote:
+        indexMin=minFinder(myArr);
+        System.out.println("The minimum is at location: "+indexMin+" The value is: "+myArr[indexMin]);
+    }
+}
+
+-----------------------------------------------------------------------------------------------------------
+
+CCCS 315: Data Structures and Algorithms
+Assignment #1 - Part 2
+Pseudocodes & Big O time complexity
+
+Pseudocode for minFinder using a loop:
+function minFinder(arr: array of integer): integer;
+var
+  index: integer;
+  min: integer;
+begin
+  index := 0;
+  min := arr[0];
+  for i := 1 to length(arr) - 1 do
+  begin
+    if arr[i] < min then
+    begin
+      min := arr[i];
+      index := i;
+    end;
+  end;
+  minFinder := index;
+end;
+
+Big O Time complexity for the loop method: O(n) 
+For the minFinder function using loops is O(n) because it loops through the entire array once, and the time it takes is directly proportional to the size of the array.
+
+Pseudocode for minFinder using a recursion:
+function minFinder_recursive(arr: array of integer; start, end: integer): integer;
+var
+  mid, leftIndex, rightIndex: integer;
+begin
+  if start = end then
+    minFinder_recursive := start
+  else
+  begin
+    mid := (start + end) div 2;
+    leftIndex := minFinder_recursive(arr, start, mid);
+    rightIndex := minFinder_recursive(arr, mid + 1, end);
+    if arr[leftIndex] < arr[rightIndex] then
+      minFinder_recursive := leftIndex
+    else
+      minFinder_recursive := rightIndex;
+  end;
+end;
+
+function minFinder_recursive(arr: array of integer): integer;
+begin
+  minFinder_recursive := minFinder_recursive(arr, 0, length(arr) - 1);
+end;
+
+Big O Time complexity for the recursion method: O(log n) 
+For the minFinder_recursive function is O(log n) because it divides the array in half in each recursive call, resulting in logarithmic time.
+
+
