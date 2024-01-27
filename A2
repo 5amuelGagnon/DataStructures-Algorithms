@@ -1,0 +1,499 @@
+// Part 1 - Stack
+
+import java.util.*;
+
+// The time complexity of the main() method in the Main class depends on the number of commands the user enters.
+// In the worst case, the user could enter n commands, each of which takes O(1) time to execute. Therefore,
+// the time complexity of the main() method is O(n).
+
+// The overall time complexity of the program is O(n), because the time complexity of the main() method dominates
+// the time complexity of the Stack class methods. The space complexity of the program is also O(n), because the
+// space used by the stack data structure increases linearly with the number of elements added to it.
+
+/**
+ A program that allows users to manipulate a stack by adding and removing elements,
+ and performing mathematical operations on the elements.
+ */
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Stack stack = new Stack();
+
+        // Display instructions for the user
+        System.out.println("Welcome to Stacks!");
+        System.out.println("- List of command");
+        System.out.println("- Enter (a) to the above question and enter an integer you wish to add to your stack");
+        System.out.println("- Enter (+ or *) as an operator to be applied to the last two items added to your stack");
+        System.out.println("- Enter (?) if you wish to see everything in your stack printed to the screen");
+        System.out.println("- Enter (p) if you wish to remove the last item");
+        System.out.println("- Enter (z) if you are done playing with stacks");
+
+        label:
+        while (true) {
+            System.out.print("Would you like to command: ");
+            String command = scanner.next();
+
+            // If user enters 'a', add an element to the stack
+            switch (command) {
+                case "a":
+                    int value = scanner.nextInt();
+                    stack.push(value);
+                    System.out.println("Your value has been added to the stack!");
+                    break;
+
+                // If user enters '+', add the last two elements of the stack
+                case "+":
+                    if (stack.size() >= 2) {
+                        int sum = stack.pop() + stack.pop();
+                        stack.push(sum);
+                        System.out.println("You have added the last two items in your stack and pushed the total: " + sum);
+                    }
+                    break;
+                // If user enters '*', multiply the last two elements of the stack
+                case "*":
+                    if (stack.size() >= 2) {
+                        int product = stack.pop() * stack.pop();
+                        stack.push(product);
+                        System.out.println("You have multiplied the last two items in your stack and pushed the total: " + product);
+                    }
+                    break;
+                // If user enters '?', display the entire stack
+                case "?":
+                    System.out.println("Your stack items are: " + stack);
+                    break;
+
+                // If user enters 'p', remove the last element from the stack
+                case "p":
+                    if (!stack.isEmpty()) {
+                        stack.pop();
+                        System.out.println("The last item has been removed from your stack.");
+                    }
+                    break;
+
+                // If user enters 'z', exit the program
+                case "z":
+                    System.out.println("Thanks for playing");
+                    break label;
+
+                // If user enters an invalid command, display an error message
+                default:
+                    System.out.println("Invalid command");
+                    break;
+            }
+        }
+    }
+}
+
+-----------------------------------------------------------------------------------------------------------
+
+import java.util.*;
+
+// The time complexity of the push(), pop(), size(), toString(), and isEmpty()
+// methods in the Stack class is O(1), because they all perform constant time
+// operations (i.e., accessing a linked list node).
+
+/**
+ The Stack class represents a stack data structure. It is implemented using
+ a LinkedList of Integer elements.
+ */
+class Stack {
+    private final LinkedList<Integer> list;
+
+    /**
+     Constructs an empty Stack.
+     */
+    public Stack() {
+        list = new LinkedList<>();
+    }
+    /**
+     Adds an element to the top of the stack.
+     @param element the element to be added to the stack
+     */
+    public void push(int element) {
+        list.addFirst(element); // add the element to the beginning of the LinkedList
+    }
+    /**
+     Removes and returns the element at the top of the stack.
+     @return the element at the top of the stack
+     @throws NoSuchElementException if the stack is empty
+     */
+    public int pop() {
+        if (list.isEmpty()) {
+            throw new NoSuchElementException();
+        }
+        return list.removeFirst(); // remove and return the first element of the LinkedList
+    }
+    /**
+     Returns the number of elements in the stack.
+     @return the number of elements in the stack
+     */
+    public int size() {
+        return list.size(); // get the size of the LinkedList
+    }
+    /**
+     Returns a string representation of the stack.
+     @return a string representation of the stack
+     */
+    public String toString() {
+        return list.toString(); // get a string representation of the LinkedList
+    }
+    /**
+     Checks whether the stack is empty.
+     @return true if the stack is empty, false otherwise
+     */
+    public boolean isEmpty() {
+        return false; // the Stack is never empty in this implementation
+    }
+}
+-----------------------------------------------------------------------------------------------------------
+
+// Part 2 - General tree
+
+// The time complexity of the main method is O(1), which means it has constant time complexity. This is because the
+// method consists of a fixed number of operations that do not depend on the input size or any looping or recursion.
+// The method simply creates a binary tree of worker objects, sets up the tree structure by assigning left and right
+// children to each node, and prints the contents of the tree in order. These operations all have constant time
+// complexity, and the number of operations does not change with the size of the input. Therefore, the time
+// complexity of the main method is O(1).
+
+/**
+ * The Main class sets up a binary tree of Worker objects and prints the contents of the tree in order.
+ */
+public class Main {
+
+    /**
+     * The main method creates a binary tree of Worker objects and prints the contents of the tree in order.
+     *
+     * @param args the command line arguments (not used in this program)
+     */
+    public static void main(String[] args) {
+        // create a new binary tree
+        BinaryTree bt = new BinaryTree();
+
+        // create seven new Worker objects
+        Worker w1 = new Worker("Alice", 10000);
+        Worker w2 = new Worker("Bob", 20000);
+        Worker w3 = new Worker("Charlie", 30000);
+        Worker w4 = new Worker("Dan", 40000);
+        Worker w5 = new Worker("Edward", 50000);
+        Worker w6 = new Worker("Paul", 60000);
+        Worker w7 = new Worker("Kris", 70000);
+
+        // set the root of the binary tree to w1
+        bt.setRoot(w1);
+
+        // set the left and right children of w1 to w2 and w3, respectively
+        bt.setLeft(w1, w2);
+        bt.setRight(w1, w3);
+
+        // set the left and right children of w2 to w4 and w5, respectively
+        bt.setLeft(w2, w4);
+        bt.setRight(w2, w5);
+
+        // set the left and right children of w3 to w6 and w7, respectively
+        bt.setLeft(w3, w6);
+        bt.setRight(w3, w7);
+
+        // print the contents of the binary tree in order
+        bt.printInOrder();
+    }
+}
+
+
+-----------------------------------------------------------------------------------------------------------
+
+//The time complexity of the BinaryTree class methods is as follows:
+//
+// size() and isEmpty() have a time complexity of O(1) because they simply return the size
+// and root instance variables, respectively.
+//
+// setRoot() has a time complexity of O(1) if the tree is empty (i.e., root is null)
+// because it simply creates a new Node object with the given Worker object and sets it as the root.
+// Otherwise, it has a time complexity of O(1) because it simply updates the Worker object of the existing root.
+//
+// setLeft() and setRight() have a time complexity of O(log n) in the average case and O(n) in the worst case,
+// where n is the number of nodes in the tree. This is because they need to find the node corresponding to the
+// parent worker, which may involve traversing the entire tree in the worst case (if the tree is unbalanced).
+//
+// printInOrder() has a time complexity of O(n) because it needs to visit all n nodes in the tree to print them in order.
+//
+// findNode() has a time complexity of O(log n) in the average case and O(n) in the worst case, where n is the number of
+// nodes in the tree. This is because it recursively searches the left or right subtree depending on whether the Worker
+// object is less than or greater than the Worker object at the current node, respectively. If the tree is unbalanced,
+// it may involve traversing the entire tree in the worst case.
+/**
+ * A binary tree data structure that stores workers.
+ */
+public class BinaryTree {
+    private Node root;
+    private int size;
+
+    /**
+     * Constructs a new empty binary tree.
+     */
+    public BinaryTree() {
+        root = null;
+        size = 0;
+    }
+
+    /**
+     * Returns the number of nodes in the tree.
+     *
+     * @return the number of nodes in the tree
+     */
+    public int size() {
+        return size;
+    }
+
+    /**
+     * Returns true if the tree is empty, false otherwise.
+     *
+     * @return true if the tree is empty, false otherwise
+     */
+    public boolean isEmpty() {
+        return size == 0;
+    }
+
+    /**
+     * Sets the root of the tree to the given worker.
+     * If the root is already set, updates the worker of the existing root.
+     *
+     * @param w the worker to set as the root
+     * @return the worker that was set as the root
+     */
+    public Worker setRoot(Worker w) {
+        if (root == null) { // if the tree is empty
+            root = new Node(w); // create a new node with the given worker and set it as the root
+            size++; // increment the size of the tree
+            return w;
+        } else { // if the tree is not empty
+            root.worker = w; // update the worker of the existing root
+            return w;
+        }
+    }
+
+    /**
+     * Sets the left child of the given parent worker to the given child worker.
+     *
+     * @param p the parent worker
+     * @param c the child worker to set as the left child
+     * @return the child worker that was set as the left child, or null if the parent worker was not found
+     */
+    public Worker setLeft(Worker p, Worker c) {
+        Node parent = findNode(root, p); // find the node corresponding to the parent worker
+        if (parent == null) { // if the parent worker is not found in the tree
+            return null; // return null
+        }
+        Node child = new Node(c); // create a new node with the given child worker
+        parent.leftChild = child; // set the new node as the left child of the parent node
+        child.parent = parent; // set the parent of the new node
+        size++; // increment the size of the tree
+        return c;
+    }
+
+    /**
+     * Sets the right child of the given parent worker to the given child worker.
+     *
+     * @param p the parent worker
+     * @param c the child worker to set as the right child
+     * @return the child worker that was set as the right child, or null if the parent worker was not found
+     */
+    public Worker setRight(Worker p, Worker c) {
+        Node parent = findNode(root, p); // find the node corresponding to the parent worker
+        if (parent == null) { // if the parent worker is not found in the tree
+            return null; // return null
+        }
+        Node child = new Node(c); // create a new node with the given child worker
+        parent.rightChild = child; // set the new node as the right child of the parent node
+        child.parent = parent; // set the parent of the new node
+        size++; // increment the size of the tree
+        return c;
+    }
+
+    /**
+     * Prints the names and salaries of the workers in the tree in order.
+     */
+    public void printInOrder() {
+        printInOrder(root);
+    }
+
+    /**
+
+     Recursively prints the names and salaries of the workers in the subtree rooted at the given node in in-order traversal.
+
+     @param node the root of the subtree to print
+     */
+    private void printInOrder(Node node) {
+        if (node != null) {
+            // Recursively print the left subtree
+            printInOrder(node.leftChild);
+            // Print the worker's name and salary
+            System.out.println(node.worker.getName() + " " + node.worker.getSalary());
+            // Recursively print the right subtree
+            printInOrder(node.rightChild);
+        }
+    }
+
+    /**
+     * This method finds a node in a binary tree that contains a specific worker.
+     *
+     * @param node   the root node of the subtree to search
+     * @param worker the worker to search for
+     * @return the node that contains the worker, or null if the worker is not found
+     */
+    private Node findNode(Node node, Worker worker) {
+        if (node == null) { // if the node is null, the worker was not found, so return null
+            return null;
+        }
+        if (node.worker == worker) { // if the current node contains the worker, return the node
+            return node;
+        }
+        Node left = findNode(node.leftChild, worker); // search the left subtree recursively
+        if (left != null) { // if the worker is found in the left subtree, return the node
+            return left;
+        }
+        Node right = findNode(node.rightChild, worker); // search the right subtree recursively
+        if (right != null) { // if the worker is found in the right subtree, return the node
+            return right;
+        }
+        return null; // the worker was not found, so return null
+    }
+}
+-----------------------------------------------------------------------------------------------------------
+
+// The time complexity of the Worker class methods (getName() and getSalary())
+// is O(1) because they simply return the name and salary instance variables, respectively.
+
+/**
+ * Represents a worker with a name and salary.
+ */
+public class Worker {
+    private final int salary; // private instance variable to store salary
+    private final String name; // private instance variable to store name
+
+    /**
+     * Constructs a new worker with the given name and salary.
+     *
+     * @param name   the name of the worker
+     * @param salary the salary of the worker
+     */
+    public Worker(String name, int salary) {
+        this.name = name;
+        this.salary = salary;
+    }
+
+    /**
+     * Returns the name of the worker.
+     *
+     * @return the name of the worker
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Returns the salary of the worker.
+     *
+     * @return the salary of the worker
+     */
+    public int getSalary() {
+        return salary;
+    }
+}
+
+-----------------------------------------------------------------------------------------------------------
+
+// The Big O of this constructor method is O(1), as it performs a constant amount of operations regardless of the input
+// size. It simply initializes the instance variables of the Node object with the provided Worker object and null values
+// for its parent, left and right children.
+/**
+
+ A class representing a node in a binary tree.
+ */
+public class Node {
+    public Worker worker; // the worker associated with this node
+    public Node parent; // the parent of this node
+    public Node leftChild; // the left child of this node
+    public Node rightChild; // the right child of this node
+
+    /**
+
+     Constructs a new node with the specified worker and null parent, left and right children.
+     @param worker the worker to be associated with this node
+     */
+    public Node(Worker worker) {
+        this.worker = worker;
+        this.parent = null;
+        this.leftChild = null;
+        this.rightChild = null;
+    }
+}
+
+-----------------------------------------------------------------------------------------------------------
+
+CCCS 315-784 Data Structures and Algorithms 
+Assignment #2 
+ 
+Part 3: Analysis 
+ 
+1. What is the time complexity of adding new element to a binary tree? 
+ 
+The time complexity of adding a new element to a binary tree depends on the type of binary tree and the implementation of the insertion algorithm.  The time complexity of adding a new element to a binary tree is O(h), where h is the height of the tree. If the tree is balanced, this is O(log n); if unbalanced, this is O(n). 
+ 
+For a binary search tree (BST), the time complexity of adding a new element depends on the height of the tree. If the tree is balanced (i.e., the height is O(log n)), the time complexity of adding a new element is O(log n). However, if the tree is unbalanced, the height can be O(n), and the time complexity of adding a new element can be O(n).   
+ 
+For a complete binary tree, adding a new element can be done in O(1) time, as the new element can be added as the left or right child of the last leaf node in the tree.   
+ 
+For a binary heap, adding a new element involves adding the element to the next available position in the bottom level of the heap, and then restoring the heap property by repeatedly swapping the new element with its parent until the parent is smaller (for a min-heap) or larger (for a max-heap) than the new element. This operation takes O(log n) time, where n is the number of elements in the heap.   
+ 
+In general, the time complexity of adding a new element to a binary tree can range from O(1) to O(n), depending on the type of binary tree and the implementation of the insertion algorithm. 
+ 
+ 
+2. What if we used general tree (0 to many children), what would be the time complexity of adding new element?  
+ 
+The time complexity of adding a new element to a general tree (a tree where each node can have 0 to many children) depends on the specific implementation of the tree. The time complexity of adding a new element to a general tree is O(c), where c is the maximum number of children per node. If the tree is balanced, this is O(1); if the tree is unbalanced, this is O(n). 
+ 
+If the tree is an ordered tree where the children of each node are sorted, then adding a new element can be done in O(log n) time, where n is the number of nodes in the tree. This can be achieved using a binary searchlike algorithm to find the correct position for the new element based on its value, and then inserting it as a child of the appropriate node.   
+ 
+If the tree is not ordered, then adding a new element can take O(1) time in the simplest case where the new element is added as a child of an existing node. However, in the worst case, adding a new element to an unbalanced tree can take O(n) time, where n is the number of nodes in the tree, if the new element is added as a child of the deepest node in the tree, causing the tree to become highly unbalanced.   
+ 
+In general, the time complexity of adding a new element to a general tree can range from O(1) to O(n), depending on the specific implementation of the tree and the properties of the tree structure. 
+ 
+Would the number of children have any effect on it? 
+ 
+Yes, the number of children per node can affect the time complexity. The time complexity of adding a new element to a general tree is proportional to the number of operations required to perform these tasks, which depends on the number of children per node and the structure of the tree. 
+ 
+In a tree where each node has a fixed number of children (e.g., a binary tree where each node has two children), the time complexity of adding a new element can be O(1) if there is available space in an existing leaf node to add the new element, or O(log n) if the new element needs to be added as a new leaf node and the tree is balanced.   
+ 
+However, in a general tree where each node can have an arbitrary number of children, adding a new element as a child of an existing node can take O(m), where m is the maximum number of children that any node in the tree can have. This is because adding a new child to a node with m children may require reallocating the entire child array for that node to accommodate the new child.   
+ 
+In the worst case, adding a new element to a general tree can take O(n), where n is the number of nodes in the tree, if the new element needs to be added as a child of the deepest node in the tree, causing the tree to become highly unbalanced.   
+ 
+Therefore, the number of children can have an impact on the time complexity of adding a new element to a general tree, especially in cases where the number of children per node is large or the tree is unbalanced. 
+ 
+ 
+3. What is the worst case for adding a new element to a general tree? 
+ 
+The worst-case time complexity of adding a new element to a general tree depends on the structure of the tree and the number of children per node. If the tree is balanced or has a broad and shallow structure, the worst-case time complexity may be lower. If the tree is unbalanced or has a deep and narrow structure, the worst-case time complexity may be higher. The worst case for adding a new element to a general tree is when the new element needs to be added as a child of the deepest node in the tree, causing the tree to become highly unbalanced.   
+ 
+In this case, the time complexity of adding the new element can be O(n), where n is the number of nodes in the tree. This is because adding the new element as a child of the deepest node may require traversing the entire depth of the tree to find the appropriate node, which can take O(n) time.   
+ 
+Furthermore, if the tree is highly unbalanced, adding a new element may require reallocating a large number of nodes and copying existing nodes to new memory locations to accommodate the new element, which can also contribute to the worst-case time complexity of O(n).   
+ 
+In general, the worst-case time complexity for adding a new element to a general tree depends on the specific structure of the tree, the properties of the tree nodes and edges, and the specific algorithm used to add the new element. However, adding a new element as a child of the deepest node in an unbalanced general tree is a common scenario that can result in the worst-case time complexity of O(n). 
+ 
+ 
+4. Is there a relationship with the height of a tree and time complexity? 
+ 
+Yes, there is a relationship between the height of a tree and the time complexity of adding a new element to the tree.  In general, the time complexity of adding a new element to a tree is proportional to the height of the tree. The taller the tree, the longer it takes to traverse the tree to find the appropriate location to add the new element. This is because adding a new element to a tree typically requires traversing the tree from the root to a leaf node or to a node where the new element can be inserted. The number of nodes visited during this traversal is proportional to the height of the tree.   
+ 
+For example, in a balanced binary search tree, the height of the tree is O(log n), where n is the number of nodes in the tree. The time complexity of adding a new element to this tree is also O(log n), since the traversal to find the appropriate leaf node takes O(log n) time.  On the other hand, in an unbalanced binary search tree where the height is O(n), adding a new element can take O(n) time in the worst case, since the traversal to find the appropriate leaf node takes O(n) time.   
+ 
+Similarly, in a general tree, the time complexity of adding a new element depends on the height of the tree, as adding a new element as a child of the deepest node in the tree can take O(n) time in the worst case, where n is the number of nodes in the tree and the height is also O(n).   
+ 
+Therefore, the height of a tree can have a significant impact on the time complexity of adding a new element to the tree. A balanced tree with a smaller height typically results in a faster insertion time complexity, while an unbalanced or highly deep tree can result in slower insertion time complexity.  
+ 
+In order to minimize the time complexity of adding a new element to a 
+tree, it is important to keep the tree balanced and maintain a shallow structure. This can be achieved through techniques such as AVL trees, RedBlack trees, or B-trees, which are designed to maintain a balance between the height of the tree and the number of nodes in the tree. 
+
+
