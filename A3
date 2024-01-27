@@ -1,0 +1,837 @@
+// Part 1 - PriorityQueues
+
+import java.util.Arrays;
+import java.util.Random;
+
+/**
+ * The App class provides a main method to run sorting algorithms on an array of integers, and measure their execution times.
+ * It contains four static methods, each implementing a different sorting algorithm, and a main method to run them.
+ */
+public class App {
+//    /**
+//
+//     Sorts an array of integers using the Arrays.sort() method and returns the execution time.
+//     @param arr The array to sort.
+//     @return The time taken to sort the array in nanoseconds.
+//     */
+//    public static int mySort1(int[] arr) {
+//// Using Arrays.sort() to sort the array
+//        long startTime = System.nanoTime();
+//        Arrays.sort(arr);
+//        long endTime = System.nanoTime();
+//        return (int) (endTime - startTime);
+//    }
+///**
+//
+// Sorts an array of integers using the MyPQSort algorithm and returns the execution time.
+// Note: This method is currently commented out.
+// @param arr The array to sort.
+// @return The time taken to sort the array in nanoseconds.
+// */
+//public static int mySort2(int[] arr) {
+// // Using MyPQSort to sort the array
+// long startTime = System.nanoTime();
+// MyPQSort.sort(arr);
+// long endTime = System.nanoTime();
+// return (int) (endTime - startTime);
+//}
+///**
+//
+// Sorts an array of integers using the bubble sort algorithm and returns the execution time.
+// Note: This method is currently commented out.
+// @param arr The array to sort.
+// @return The time taken to sort the array in nanoseconds.
+// */
+//public static int mySort3(int[] arr) {
+// // Using bubble sort to sort the array
+// long startTime = System.nanoTime();
+// for (int i = 0; i < arr.length; i++) {
+// for (int j = 1; j < arr.length - i; j++) {
+// if (arr[j - 1] > arr[j]) {
+// int temp = arr[j - 1];
+// arr[j - 1] = arr[j];
+// arr[j] = temp;
+// }
+// }
+// }
+// long endTime = System.nanoTime();
+// return (int) (endTime - startTime);
+//}
+
+
+    /**
+     * Sorts an array of integers using the Arrays.sort() method and returns the execution time.
+     *
+     * @param arr The array to sort.
+     * @return The time taken to sort the array in nanoseconds.
+     */
+    public static int mySort1(int[] arr) {
+        // Using Arrays.sort() to sort the array
+        long startTime = System.nanoTime();
+        Arrays.sort(arr);
+        long endTime = System.nanoTime();
+        return (int) (endTime - startTime);
+    }
+
+    /**
+     * Sorts an array of integers using the MyHeapSort algorithm and returns the execution time.
+     *
+     * @param arr The array to sort.
+     * @return The time taken to sort the array in nanoseconds.
+     */
+    public static int mySort2(int[] arr) {
+        // Using MyHeapSort to sort the array
+        long startTime = System.nanoTime();
+        MyHeapSort.sort(arr);
+        long endTime = System.nanoTime();
+        return (int) (endTime - startTime);
+    }
+
+    /**
+     * Sorts an array of integers using the MyInsertionSort algorithm and returns the execution time.
+     *
+     * @param arr The array to sort.
+     * @return The time taken to sort the array in nanoseconds.
+     */
+    public static int mySort3(int[] arr) {
+        // Using MyInsertionSort to sort the array
+        long startTime = System.nanoTime();
+        MyInsertionSort.sort(arr);
+        long endTime = System.nanoTime();
+        return (int) (endTime - startTime);
+    }
+
+    /**
+     * Sorts an array of integers using the MySelectionSort algorithm and returns the execution time.
+     *
+     * @param arr The array to sort.
+     * @return The time taken to sort the array in nanoseconds.
+     */
+    public static int mySort4(int[] arr) {
+        // Using MySelectionSort to sort the array
+        long startTime = System.nanoTime();
+        MySelectionSort.sort(arr);
+        long endTime = System.nanoTime();
+        return (int) (endTime - startTime);
+    }
+
+    /**
+     * Generates an array of random integers, copies it to four other arrays, sorts them using different algorithms and measures their execution time.
+     * Prints the execution times of the sorting algorithms.
+     *
+     * @param args Command line arguments (not used).
+     */
+    public static void main(String[] args) {
+        int numItem = 100;
+        int[] myArr = new int[numItem];
+        Random myRand = new Random();
+        int min = 5;
+        int max = 1000;
+
+        // Fills the array with random integers.
+        for (int i = 0; i < myArr.length; i++) {
+            myArr[i] = myRand.nextInt(max - min + 1) + min;
+        }
+
+        // Copies the array to four other arrays.
+        int[] arr1 = Arrays.copyOf(myArr, myArr.length);
+        int[] arr2 = Arrays.copyOf(myArr, myArr.length);
+        int[] arr3 = Arrays.copyOf(myArr, myArr.length);
+        int[] arr4 = Arrays.copyOf(myArr, myArr.length);
+
+        // Sort using Arrays.sort()
+        int time1 = mySort1(arr1);
+        System.out.println("Time taken by Arrays.sort(): " + time1);
+
+        // Sort using MyHeapSort
+        int time2 = mySort2(arr2);
+        System.out.println("Time taken by MyHeapSort: " + time2);
+
+        // Sort using MyInsertionSort
+        int time3 = mySort3(arr3);
+        System.out.println("Time taken by MyInsertionSort: " + time3);
+
+        // Sort using MySelectionSort
+        int time4 = mySort4(arr4);
+        System.out.println("Time taken by MySelectionSort: " + time4);
+    }
+}
+
+--------------------------------------------------------------------------------------
+
+/**
+
+ This class represents a priority queue data structure.
+ */
+public class MyPQ {
+    private final MyHeap heap;
+
+    /**
+
+     Constructs a new empty priority queue.
+     */
+    public MyPQ() {
+        heap = new MyHeap();
+    }
+    /**
+
+     Inserts an element into the priority queue.
+     @param element the element to be inserted
+     */
+    public void insert(int element) {
+        heap.insert(element);
+    }
+    /**
+
+     Returns the minimum element in the priority queue without removing it.
+     @return the minimum element in the priority queue
+     */
+    public int min() {
+        return heap.min();
+    }
+    /**
+
+     Removes and returns the minimum element in the priority queue.
+     @return the minimum element in the priority queue
+     */
+    public int removeMin() {
+        return heap.removeMin();
+    }
+    /**
+
+     Returns the number of elements in the priority queue.
+     @return the number of elements in the priority queue
+     */
+    public int size() {
+        return heap.size();
+    }
+    /**
+
+     Returns a string representation of the priority queue.
+     @return a string representation of the priority queue
+     */
+    @Override
+    public String toString() {
+        return heap.toString();
+    }
+}
+
+--------------------------------------------------------------------------------------
+
+/**
+ * This class provides a static method to perform priority queue sort on an integer array.
+ */
+public class MyPQSort {
+
+    /**
+     * Sorts an integer array in non-descending order using priority queue sort.
+     *
+     * @param arr the array to be sorted
+     */
+    public static void sort(int[] arr) {
+        // Create a new priority queue
+        MyPQ pq = new MyPQ();
+
+        // Insert each element of the array into the priority queue
+        for (int j : arr) {
+            pq.insert(j);
+        }
+
+        // Remove the minimum element from the priority queue and put it into the array
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = pq.removeMin();
+        }
+    }
+}
+
+--------------------------------------------------------------------------------------
+
+import java.util.ArrayList;
+
+/**
+ * This class represents a min-heap data structure.
+ */
+public class MyHeap {
+    private final ArrayList<Integer> heap;
+
+    /**
+     * Constructs a new empty heap.
+     */
+    public MyHeap() {
+        heap = new ArrayList<>();
+    }
+
+    /**
+     * Inserts an element into the heap.
+     *
+     * @param element the element to be inserted
+     */
+    public void insert(int element) {
+        heap.add(element);
+        upHeap(heap.size() - 1);
+    }
+
+    /**
+     * Returns the minimum element in the heap.
+     *
+     * @return the minimum element in the heap
+     * @throws IllegalStateException if the heap is empty
+     */
+    public int min() {
+        if (heap.size() == 0) {
+            throw new IllegalStateException("Heap is empty.");
+        }
+        return heap.get(0);
+    }
+
+    /**
+     * Removes and returns the minimum element in the heap.
+     *
+     * @return the minimum element in the heap
+     * @throws IllegalStateException if the heap is empty
+     */
+    public int removeMin() {
+        if (heap.size() == 0) {
+            throw new IllegalStateException("Heap is empty.");
+        }
+        int min = heap.get(0);
+        heap.set(0, heap.get(heap.size() - 1));
+        heap.remove(heap.size() - 1);
+        downHeap(0);
+        return min;
+    }
+
+    /**
+     * Returns the number of elements in the heap.
+     *
+     * @return the number of elements in the heap
+     */
+    public int size() {
+        return heap.size();
+    }
+
+    /**
+     * Returns a string representation of the heap.
+     *
+     * @return a string representation of the heap
+     */
+    @Override
+    public String toString() {
+        return heap.toString();
+    }
+
+    /**
+     * Performs up-heap bubbling to restore the heap property.
+     *
+     * @param i the index of the element to be up-heap bubbled
+     */
+    private void upHeap(int i) {
+        int parentIndex = (i - 1) / 2;
+        while (i > 0 && heap.get(parentIndex) > heap.get(i)) {
+            swap(i, parentIndex);
+            i = parentIndex;
+            parentIndex = (i - 1) / 2;
+        }
+    }
+
+    /**
+     * Performs down-heap bubbling to restore the heap property.
+     *
+     * @param i the index of the element to be down-heap bubbled
+     */
+    private void downHeap(int i) {
+        int leftChildIndex = 2 * i + 1;
+        int rightChildIndex = 2 * i + 2;
+        int smallest = i;
+        if (leftChildIndex < heap.size() && heap.get(leftChildIndex) < heap.get(smallest)) {
+            smallest = leftChildIndex;
+        }
+        if (rightChildIndex < heap.size() && heap.get(rightChildIndex) < heap.get(smallest)) {
+            smallest = rightChildIndex;
+        }
+        if (smallest != i) {
+            swap(i, smallest);
+            downHeap(smallest);
+        }
+    }
+
+    /**
+     * Swaps two elements in the heap.
+     *
+     * @param i the index of the first element
+     * @param j the index of the second element
+     */
+    private void swap(int i, int j) {
+        int temp = heap.get(i);
+        heap.set(i, heap.get(j));
+        heap.set(j, temp);
+    }
+}
+
+--------------------------------------------------------------------------------------
+
+/**
+ * This class provides a static method to perform heap sort on an integer array.
+ */
+public class MyHeapSort {
+
+    /**
+     * Sorts an integer array in non-descending order using heap sort.
+     *
+     * @param arr the array to be sorted
+     */
+    public static void sort(int[] arr) {
+        // Create a new heap
+        MyHeap heap = new MyHeap();
+
+        // Insert each element of the array into the heap
+        for (int j : arr) {
+            heap.insert(j);
+        }
+
+        // Remove the minimum element from the heap and put it into the array
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = heap.removeMin();
+        }
+    }
+}
+
+--------------------------------------------------------------------------------------
+
+/**
+ * This class provides a static method to perform selection sort on an integer array.
+ */
+public class MySelectionSort {
+
+    /**
+     * Sorts an integer array in non-descending order using selection sort.
+     *
+     * @param arr the array to be sorted
+     */
+    public static void sort(int[] arr) {
+        for (int i = 0; i < arr.length - 1; i++) {
+            int minIndex = i;
+            // Find the minimum element in the unsorted subarray
+            for (int j = i + 1; j < arr.length; j++) {
+                if (arr[j] < arr[minIndex]) {
+                    minIndex = j;
+                }
+            }
+            // Swap the minimum element with the first element in the unsorted subarray
+            int temp = arr[minIndex];
+            arr[minIndex] = arr[i];
+            arr[i] = temp;
+        }
+    }
+}
+
+--------------------------------------------------------------------------------------
+
+/**
+ * This class provides a static method to perform insertion sort on an integer array.
+ */
+public class MyInsertionSort {
+
+    /**
+     * Sorts an integer array in non-descending order using insertion sort.
+     *
+     * @param arr the array to be sorted
+     */
+    public static void sort(int[] arr) {
+        for (int i = 1; i < arr.length; i++) {
+            int key = arr[i];
+            int j = i - 1;
+            // Move elements of arr[0..i-1], that are greater than key, to one position ahead
+            // of their current position
+            while (j >= 0 && arr[j] > key) {
+                arr[j + 1] = arr[j];
+                j--;
+            }
+            arr[j + 1] = key;
+        }
+    }
+}
+
+--------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------
+
+// Part 2 - Search
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.Random;
+
+/**
+ * This class demonstrates different search algorithms to find a target value in an array and a linked list.
+ */
+public class FindValue {
+
+    private static final int ARRAY_SIZE = 100;
+    private static final int MIN_VALUE = 0;
+    private static final int MAX_VALUE = 100;
+    private static final int MyVal = 5;
+
+    public static void main(String[] args) {
+        // Generate an integer array with random values
+        int[] arr = generateIntArray();
+
+        System.out.println("Generated array: " + Arrays.toString(arr));
+
+        // Perform linear search on the unsorted array and measure the time taken
+        long startTime = System.nanoTime();
+        int linearSearchArrayResult = linearSearchArray(arr);
+        long endTime = System.nanoTime();
+        long linearSearchArrayTime = endTime - startTime;
+        System.out.println("Linear search in unsorted array result: " + linearSearchArrayResult);
+        System.out.println("Linear search in unsorted array time: " + linearSearchArrayTime + " ns");
+
+        // Perform binary search on the unsorted array and measure the time taken
+        startTime = System.nanoTime();
+        int binarySearchUnsortedArrayResult = binarySearchUnsortedArray(arr);
+        endTime = System.nanoTime();
+        long binarySearchUnsortedArrayTime = endTime - startTime;
+        System.out.println("Binary search in unsorted array result: " + binarySearchUnsortedArrayResult);
+        System.out.println("Binary search in unsorted array time: " + binarySearchUnsortedArrayTime + " ns");
+        System.out.println("------------------------------------------------------------------");
+
+        LinkedList<Integer> list = new LinkedList<>();
+
+        // Add random values to the linked list
+        for (int i = 0; i < ARRAY_SIZE; i++) {
+            int randomValue = (int) (Math.random() * (MAX_VALUE - MIN_VALUE + 1) + MIN_VALUE);
+            list.add(randomValue);
+        }
+
+        // Print the generated linked list
+        System.out.println("Generated linked list: " + list);
+
+        // Perform linear search on the unsorted linked list and measure the time taken
+        startTime = System.nanoTime();
+        int linearSearchListResult = linearSearchList(list);
+        endTime = System.nanoTime();
+        long linearSearchListTime = endTime - startTime;
+        System.out.println("Linear search in unsorted linked list result: " + linearSearchListResult);
+        System.out.println("Linear search in unsorted linked list time: " + linearSearchListTime + " ns");
+
+        // Perform binary search on the unsorted linked list and measure the time taken
+        startTime = System.nanoTime();
+        int binarySearchUnsortedListResult = binarySearchUnsortedList(list);
+        endTime = System.nanoTime();
+        long binarySearchUnsortedListTime = endTime - startTime;
+        System.out.println("Binary search in unsorted linked list result: " + binarySearchUnsortedListResult);
+        System.out.println("Binary search in unsorted linked list time: " + binarySearchUnsortedListTime + " ns");
+        System.out.println("------------------------------------------------------------------");
+
+        // Sort the array for binary search and measure the time taken
+        startTime = System.nanoTime();
+        Arrays.sort(arr);
+        endTime = System.nanoTime();
+        long sortArrayTime = endTime - startTime;
+        System.out.println("Sorted array:       " + Arrays.toString(arr));
+        System.out.println("Sorting array time: " + sortArrayTime + " ns");
+
+        // Perform linear search on the sorted array and measure the time taken
+        startTime = System.nanoTime();
+        int linearSearchSortedArrayResult = linearSearchSortedArray(arr);
+        endTime = System.nanoTime();
+        long linearSearchSortedArrayTime = endTime - startTime;
+        System.out.println("Linear search in sorted array result: " + linearSearchSortedArrayResult);
+        System.out.println("Linear search in sorted array time: " + linearSearchSortedArrayTime + " ns");
+
+        // Perform binary search on the array and measure the time taken
+        startTime = System.nanoTime();
+        int binarySearchArrayResult = binarySearchArray(arr, MyVal, 0, arr.length - 1);
+        endTime = System.nanoTime();
+        long binarySearchArrayTime = endTime - startTime;
+        System.out.println("Binary search in sorted array result: " + binarySearchArrayResult);
+        System.out.println("Binary search in sorted array time: " + binarySearchArrayTime + " ns");
+        System.out.println("------------------------------------------------------------------");
+
+        // Sort the linked list for binary search and measure the time taken
+        startTime = System.nanoTime();
+        Collections.sort(list);
+        endTime = System.nanoTime();
+        long sortListTime = endTime - startTime;
+        System.out.println("Sorted linked list: " + list);
+        System.out.println("Sorting list time:  " + sortListTime + " ns");
+
+        // Sort the linked list for linear search and measure the time taken
+        Collections.sort(list);
+        startTime = System.nanoTime();
+        int linearSearchSortedListResult = linearSearchSortedList(list);
+        endTime = System.nanoTime();
+        long linearSearchSortedListTime = endTime - startTime;
+        System.out.println("Linear search in sorted linked list result: " + linearSearchSortedListResult);
+        System.out.println("Linear search in sorted linked list time: " + linearSearchSortedListTime + " ns");
+
+        // Perform binary search on the linked list and measure the time taken
+        startTime = System.nanoTime();
+        int binarySearchListResult = binarySearchList(list, MyVal, 0, list.size() - 1);
+        endTime = System.nanoTime();
+        long binarySearchListTime = endTime - startTime;
+        System.out.println("Binary search in sorted linked list result: " + binarySearchListResult);
+        System.out.println("Binary search in sorted linked list time: " + binarySearchListTime + " ns");
+    }
+
+    /**
+     * Generates an integer array with random values in a specified range.
+     *
+     * @return the generated integer array
+     */
+    private static int[] generateIntArray() {
+        int[] arr = new int[FindValue.ARRAY_SIZE];
+        Random random = new Random();
+
+        // Assign random values to the array elements
+        for (int i = 0; i < FindValue.ARRAY_SIZE; i++) {
+            arr[i] = random.nextInt(FindValue.MAX_VALUE - FindValue.MIN_VALUE + 1) + FindValue.MIN_VALUE;
+        }
+
+        return arr;
+    }
+
+    /**
+     * Performs a linear search for a target value in an array.
+     *
+     * @param arr the array to search
+     * @return the index of the target value if found, otherwise -1
+     */
+    private static int linearSearchArray(int[] arr) {
+        // Iterate through the array to find the target value
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] == FindValue.MyVal) {
+                return i; // Target value found, return its index
+            }
+        }
+        return -1; // Target value not found, return -1
+    }
+
+    /**
+     * Performs a linear search for a target value in a linked list.
+     *
+     * @param list the linked list to search
+     * @return the index of the target value if found, otherwise -1
+     */
+    private static int linearSearchList(LinkedList<Integer> list) {
+        int index = 0;
+        // Iterate through the linked list to find the target value
+        for (Integer value : list) {
+            if (value == FindValue.MyVal) {
+                return index; // Target value found, return its index
+            }
+            index++; // Increment index as we traverse the linked list
+        }
+        return -1; // Target value not found, return -1
+    }
+
+    /**
+     * Performs a linear search for a target value in a sorted array.
+     *
+     * @param arr the sorted array to search
+     * @return the index of the target value if found, otherwise -1
+     */
+    private static int linearSearchSortedArray(int[] arr) {
+        // Iterate through the array until we reach a value greater than the target
+        for (int i = 0; i < arr.length && arr[i] <= FindValue.MyVal; i++) {
+            if (arr[i] == FindValue.MyVal) {
+                return i; // Target value found, return its index
+            }
+        }
+        return -1; // Target value not found, return -1
+    }
+
+    /**
+     * Performs a linear search for a target value in a sorted linked list.
+     *
+     * @param list the sorted linked list to search
+     * @return the index of the target value if found, otherwise -1
+     */
+    private static int linearSearchSortedList(LinkedList<Integer> list) {
+        int index = 0;
+        // Iterate through the linked list until we reach a value greater than the target
+        for (Integer value : list) {
+            if (value == FindValue.MyVal) {
+                return index; // Target value found, return its index
+            } else if (value > FindValue.MyVal) {
+                return -1; // Target value not found, return -1
+            }
+            index++; // Increment index as we traverse the linked list
+        }
+        return -1; // Target value not found, return -1
+    }
+
+
+    /**
+     * Performs a binary search for a target value in an unsorted array.
+     *
+     * @param arr the array to search
+     * @return the index of the target value if found, otherwise -1
+     */
+    private static int binarySearchUnsortedArray( int[] arr){
+        // Iterate through the array to find the target value
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] == FindValue.MyVal) {
+                return i; // Target value found, return its index
+            }
+        }
+        return -1; // Target value not found, return -1
+    }
+
+    /**
+     * Performs a binary search for a target value in an unsorted linked list.
+     *
+     * @param list the linked list to search
+     * @return the index of the target value if found, otherwise -1
+     */
+    private static int binarySearchUnsortedList (LinkedList < Integer > list){
+        int index = 0;
+        // Iterate through the linked list to find the target value
+        for (Integer value : list) {
+            if (value == FindValue.MyVal) {
+                return index; // Target value found, return its index
+            }
+            index++; // Increment index as we traverse the linked list
+        }
+        return -1; // Target value not found, return -1
+    }
+
+
+    /**
+     * Performs a binary search for a target value in a sorted array.
+     *
+     * @param arr    the sorted array to search
+     * @param target the target value to find
+     * @param low    the lower index bound for the search range
+     * @param high   the upper index bound for the search range
+     * @return the index of the target value if found, otherwise -1
+     */
+    private static int binarySearchArray(int[] arr, int target, int low, int high) {
+        if (low <= high) {
+            int mid = low + (high - low) / 2; // Calculate the middle index
+
+            if (arr[mid] == target) {
+                return mid; // Target value found, return its index
+            } else if (arr[mid] > target) {
+                // Target value is in the left half, update the high index
+                return binarySearchArray(arr, target, low, mid - 1);
+            } else {
+                // Target value is in the right half, update the low index
+                return binarySearchArray(arr, target, mid + 1, high);
+            }
+        }
+        return -1; // Target value not found, return -1
+    }
+    private static int binarySearchList(LinkedList<Integer> list, int target, int low, int high) {
+        if (low <= high) {
+            int mid = low + (high - low) / 2; // Calculate the middle index
+
+            int midValue = list.get(mid); // Access the middle element using list.get()
+
+            if (midValue == target) {
+                return mid; // Target value found, return its index
+            } else if (midValue > target) {
+                // Target value is in the left half, update the high index
+                return binarySearchList(list, target, low, mid - 1);
+            } else {
+                // Target value is in the right half, update the low index
+                return binarySearchList(list, target, mid + 1, high);
+            }
+        }
+        return -1; // Target value not found, return -1
+    }
+}
+
+--------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------
+
+// Part 3 - Analysis
+
+CCCS 315-784 Data Structures and Algorithms 
+Assignment 3 – Analysis 
+Samuel Lafreniere-Gagnon ID 261127529 
+ 
+Part 1 – Priority Queues 
+ 
+1) Do the Big-O analysis of each algorithm? 
+ 
+Arrays.sort(): This method in Java uses a variation of quicksort, which has an average-case time complexity of O(nlogn), where n is the number of elements in the array. In the worst case, quicksort can have a time complexity of O(n^2), but this is very rare and unlikely to occur in practice. 
+T(n) = a * n * log n + b * n^2 + c  
+Description: 'a' represents the time taken per comparison and swap in the average case, 'b' represents the time taken per comparison and swap in the worst case, and 'c' is the constant overhead of initializing variables and other setup tasks.   Time complexity: Big O is O(n log n), worst-case O(n^2) 
+ 
+MyHeapSort: Heap sort has a time complexity of O(nlogn) in the average and worst case scenarios, which is the same as quicksort O(n^2). However, heap sort has a larger constant factor than quicksort, which makes it slower in practice for smaller arrays. 
+T(n) = d * n * log n + e * n^2 + f  
+Description: 'd' represents the time taken per comparison and swap in the average case, 'e' represents the time taken per comparison and swap in the worst case, and 'f' is the constant overhead of initializing variables and other setup tasks.   Time complexity: Big O is O(n log n), worst-case O(n^2) 
+ 
+MyInsertionSort: Insertion sort has a time complexity of O(n^2) in the worst and average case scenarios, which makes it slower than quicksort and heap sort for larger arrays. 
+T(n) = g * n^2 + h  
+Description: 'g' represents the time taken per comparison and swap, and 'h' is the constant overhead of initializing variables and other setup tasks.  
+Time complexity: Big O is O(n^2) 
+ 
+MySelectionSort: Selection sort has a time complexity of O(n^2) in the worst and average case scenarios, which makes it slower than quicksort and heap sort for larger arrays. 
+T(n) = i * n^2 + j  
+Description: 'i' represents the time taken per comparison and swap, and 'j' is the constant overhead of initializing variables and other setup tasks.  These T(n) representations include the time taken for the basic operations in each sorting method, as well as the constant overhead.  
+Time complexity: Big O is O(n^2) 
+ 
+2)	Can you comment which one is faster? 
+In terms of speed, quicksort and heap sort are generally faster than insertion sort and selection sort for larger arrays. However, for very small arrays, insertion sort may be faster due to its lower constant factor. 
+ 
+3)	Do you think if we use array or LinkedList, we could speed the program up? 
+Whether using an array or a linked list would speed up the program depends on the specific implementation of the algorithms. In general, arrays are faster for random access and indexing, while linked lists are faster for insertion and deletion operations. However, the algorithms implemented here are optimized for arrays, so using a linked list would likely result in slower performance. 
+
+4)	Does the array initial order have any effect on the speed? 
+The initial order of the array can have an effect on the speed of the sorting algorithms. For example, if the array is already sorted, insertion sort and selection sort will be faster than quicksort and heap sort, which have to do more comparisons and swaps to sort the array. Similarly, if the array is sorted in reverse order, heap sort will be faster than quicksort, since quicksort has a worst-case time complexity of O(n^2) for reverse-sorted arrays. 
+ 
+Part 2 – Search 
+ 
+Analysis of the running time of all methods using Big-O notation: 
+
+1) The generateIntArray method: This method iterates through the array and assigns a random value to each element. Since it goes through the entire array of size n once, its time complexity is O(n). 
+T(n) = a * n + b 
+ 
+Description: 'a' represents the time taken to generate a random integer and assign it to an array element, and 'b' is the constant overhead of initializing the array and other setup tasks. 
+ 
+Time complexity: Big O is O(n) 
+ 
+2) Linear Search (linearSearchArray and linearSearchList methods): In linear search, the algorithm goes through the entire array or linked list one element at a time, comparing each element with the target value. In the worst-case scenario, the target value is at the end of the array/list or not present at all, causing the algorithm to check all elements. Therefore, the time complexity of linear search is O(n). 
+T(n) = c * n + d   
+Description:  'c' represents the time taken to compare an element with the target value, and 'd' is the constant overhead of initializing variables and other setup tasks. 
+Time complexity: Big O is O(n) 
+ 
+3) Binary Search (binarySearchArray method): In binary search, the array needs to be sorted first. Sorting an array using common sorting algorithms like QuickSort or MergeSort has a time complexity of O(n * log n). However, the sorting operation is performed separately and is not part of the binary search algorithm itself. 
+For the binary search algorithm, the input array is repeatedly divided in half until the target value is found or the interval is empty. With each iteration, the search space is reduced by half. The worst-case scenario happens when the target value is not in the array or is located at either end of the sorted array. The time complexity of binary search is O(log n) since the search space is reduced by a factor of 2 in each step. 
+T(n) = e * log n + f   
+ 
+Description: 'e' represents the time taken for each comparison and interval update in the binary search algorithm, and 'f' is the constant overhead of initializing variables and other setup tasks. 
+ 
+Time complexity: Big O is O(log n) (excluding the sorting step) 
+ 
+4) Binary Search (binarySearchList method): Similar to the binary search on an array, the time complexity of binary search on a linked list is also O(log n) since the search space is reduced by a factor of 2 in each step. However, accessing an element in a linked list takes O(n) time in the worst-case scenario, so the binary search on a linked list is less efficient than binary search on an array.  
+T(n) = g * log n + h 
+Description: 'g' represents the time taken for each comparison and interval update in the binary search algorithm, and 'h' is the constant overhead of initializing variables and other setup tasks. 
+Time complexity: Big O is O(n log n) 
+
+5) Binary Search on Unsorted Array (binarySearchUnsortedArray method): Since the array is unsorted, binary search cannot be used, and linear search must be performed, which has a time complexity of O(n).  
+T(n) = i * n + j 
+Description: 'i' represents the time taken for each comparison in the linear search algorithm, and 'j' is the constant overhead of initializing variables and other setup tasks. 
+Time complexity: Big O is O(n) 
+
+6) Binary Search on Unsorted Linked List (binarySearchUnsortedList method): Since the linked list is unsorted, binary search cannot be used, and linear search must be performed, which has a time complexity of O(n).  
+T(n) = k * n + l 
+Description: 'k' represents the time taken for each comparison in the linear search algorithm, and 'l' is the constant overhead of initializing variables and other setup tasks. 
+Time complexity: Big O is O(n) 
+
+7) Linear Search on Sorted Array (linearSearchSortedArray method): Although the array is sorted, using linear search is still inefficient since the worst-case scenario is still when the target value is located at the end of the array or not present at all, causing the algorithm to check all elements. Therefore, the time complexity of linear search on a sorted array is still O(n).  
+T(n) = m * n + o 
+Description: 'm' represents the time taken for each comparison in the linear search algorithm, and 'o' is the constant overhead of initializing variables and other setup tasks. 
+Time complexity: Big O is O(n) 
+
+8) Linear Search on Sorted Linked List (linearSearchSortedList method): Similar to 
+linear search on a sorted array, linear search on a sorted linked list is still inefficient since the worst-case scenario is still when the target value is located at the end of the linked list or not present at all, causing the algorithm to check all elements. Therefore, the time complexity of linear search on a sorted linked list is still O(n).  
+T(n) = p * n + q 
+Description: 'p' represents the time taken for each comparison in the linear search algorithm, and 'q' is the constant overhead of initializing variables and other setup tasks. 
+Time complexity: Big O is O(n) 
+ 
+
+
+--------------------------------------------------------------------------------------
